@@ -6,7 +6,7 @@
 [![React](https://img.shields.io/badge/react-v18+-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-v5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/fastapi-v0.100+-green.svg)](https://fastapi.tiangolo.com/)
-[![Node.js](https://img.shields.io/badge/node.js-v22+-green.svg)](https://nodejs.org/)
+[![Bun](https://img.shields.io/badge/bun-v1+-black.svg)](https://bun.sh/)
 ## 🎯 About AgriVerse
 
 AgriVerse is a comprehensive AI-powered agricultural advisory platform that revolutionizes farming intelligence through a sophisticated **multi-agent system**. Built for the **Capital One Launchpad 2025 Hackathon**, this platform democratizes agricultural expertise by making advanced AI accessible to farmers, agricultural specialists, researchers, and policymakers worldwide.
@@ -37,8 +37,8 @@ graph TD
     H[Data.gov.in APIs] --> C
     I[GetMandiPrice Calculator] --> D
     J[GetCommodityPrice] --> D
-    K[QueryVectorDB] --> E
-    L[QueryFinanceVectorDB] --> F
+    K[QueryVectorDB (Port 8000)] --> E
+    L[QueryFinanceVectorDB (Port 8000)] --> F
     
     M[Gemini 2.0 Flash] --> B
     M --> C
@@ -99,9 +99,10 @@ graph TD
 
 Before you begin, ensure you have the following installed:
 
-- **Python 3.12 or higher** ([Download Python](https://www.python.org/downloads/))
-- **Node.js 22 and npm** ([Download Node.js](https://nodejs.org/))
+- **Docker and Docker Compose** ([Download Docker](https://www.docker.com/products/docker-desktop/))
 - **Git** ([Download Git](https://git-scm.com/downloads))
+
+*Note: For manual setup without Docker, you will also need Python 3.12+ and Bun v1+.*
 
 ### API Keys Required
 
@@ -122,116 +123,74 @@ You'll need to obtain the following API keys:
 
 ---
 
-## 📦 Installation & Setup
+## 📦 Installation & Setup (Docker Recommended)
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Ilesh-Dhall/AgriVerse-Capital-One-Launchpad-2025-Hackathon.git
-cd AgriVerse-Capital-One-Launchpad-2025
-```
-### 2. Create Environment Configuration
-
-Create a `.env` file in the root directory with the required webhook URL (leave default unless required):
-
-```bash
-# Create .env file
-touch .env
-
-# Add webhook configuration
-echo "WEBHOOK=http://localhost:5678/webhook-test/my-endpoint" > .env
+cd AgriVerse-Capital-One-Launchpad-2025-Hackathon
 ```
 
-### 3. Backend Setup
-
-#### Create and Activate Virtual Environment
+### 2. Download the Vector Databases
+Before starting the containers, populate the vector databases:
 ```bash
-# Create virtual environment
-python3 -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-```
-
-#### Install Dependencies
-**Note:** If you have **GPU** then change the **Pytorch version manually** in ```requirements.txt``` file. For Exact Version refer to [Pytorch Website](https://pytorch.org/get-started/locally).
-```bash
-pip install -r requirements.txt
-```
-
-#### Download the Vector Databases
-```bash
+cd backend
 chmod +x vectordb_setup.sh
 ./vectordb_setup.sh
+cd ..
 ```
+To build it from scratch instead [refer here](#manual-vector-database-setup-optional). (Optional)
 
-To build it from scratch instead [refer here](#-manual-vector-database-setup-optional). (Optional)
-
-#### Start the Backend Servers (RAG Vector Databases)
-**In Terminal 1 (from root) run:**
+### 3. Start the Platform
+Run the entire stack using Docker Compose:
 ```bash
-cd backend/VectorDatabases/db_endpoints
-python3 -m uvicorn query_service_icar:app --reload --host 127.0.0.1 --port 8000
+docker compose up --build
 ```
+This single command spins up:
+- **Next.js Frontend** at `http://localhost:3000`
+- **Unified FastAPI Backend** at `http://localhost:8000` (Endpoints: `/api/icar/query` & `/api/datagovin/query`)
+- **n8n Orchestrator** at `http://localhost:5678`
 
-The backend API will be available at: `http://127.0.0.1:8000`
-
-**In Terminal 2 (from root) run:**
-```bash
-cd backend/VectorDatabases/db_endpoints
-python3 -m uvicorn query_service_datagovin:app --reload --host 127.0.0.2 --port 8001
-```
-
-The backend API will be available at: `http://127.0.0.2:8001`
-
----
-### 4. n8n Setup (Agent Workflow):
-
-#### Install and Start n8n
-In a new terminal in your home directory run:
-```bash
-npx n8n
-```
-This command will run a n8n instance locally without downloading all dependencies.
-
-To get detailed instruction refer to [n8n official github repository](https://github.com/n8n-io/n8n).
-
-
-#### Import AgriVerse Workflow
+### 4. Import n8n Workflow
 1. Open n8n at `http://localhost:5678`
-2. Create a free n8n account (get free commercial license from settings)
+2. Create a free initial account setup.
 3. Create a **blank workflow**
 4. Click **three-dot menu** → **Import from file**
-5. Select `AgriVerse-n8n-Workflow.json` from project root
+5. Select `AgriVerse-n8n-Workflow.json` from the `workflows/` directory.
 
-#### Configure Credentials
+#### Configure Credentials in n8n
 1. **Google Gemini**: Click any Gemini node → Create New Credential → Add your API key
 2. **OpenWeatherMap**: Click OpenWeatherMap node → Create New Credential → Add API key in Access Token field
-3. **Activate the workflow** by clicking the toggle switch in menu bar
+3. **Activate the workflow** by clicking the toggle switch in the menu bar.
 
 ---
 
-### 5. Frontend Setup 
+### Alternative: Manual Setup
+If you prefer not to use Docker, you can run the components manually:
 
-#### Navigate to root Directory (New Terminal)
+**1. Backend:**
 ```bash
- cd AgriVerse-Capital-One-Launchpad-2025-Hackathon/
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+./vectordb_setup.sh
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-#### Install Dependencies
+**2. Frontend:**
 ```bash
-npm install
+cd frontend
+bun install
+bun run dev
 ```
 
-#### Start Development Server
+**3. n8n:**
 ```bash
-npm dev
+npx n8n
+# Then import workflows/AgriVerse-n8n-Workflow.json at http://localhost:5678
 ```
-
-The frontend will be available at: `http://localhost:3000`
 
 ---
 
@@ -346,15 +305,11 @@ This script will:
 ### 🔍 Verification
 After building, verify your databases are working:
 ```bash
-# Test ICAR database
-cd backend/VectorDatabases/db_endpoints
-python3 -m uvicorn query_service_icar:app --reload --host 127.0.0.1 --port 8000
-
-# Test Data.gov.in database (in another terminal)
-python3 -m uvicorn query_service_datagovin:app --reload --host 127.0.0.2 --port 8001
+cd backend
+python3 -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Visit `http://127.0.0.1:8000/docs` and `http://127.0.0.2:8001/docs` to test the API endpoints.
+Visit `http://127.0.0.1:8000/docs` to test both the `/api/icar/query` and `/api/datagovin/query` API endpoints.
 
 **Note**: If you encounter any issues during manual setup, you can always fall back to the pre-built databases using the `vectordb_setup.sh` script.
 
