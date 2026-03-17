@@ -1,7 +1,7 @@
 import json
-from langchain.schema import Document
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_core.documents import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 with open("./data/datagovin/finance.json", "r") as f:
@@ -28,3 +28,4 @@ vectorstore = Chroma.from_documents(
     embeddings,
     persist_directory="./embeddings/datagovin_db"
 )
+vectorstore.persist()
