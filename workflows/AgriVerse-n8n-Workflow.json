@@ -8,14 +8,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -464,
-        272
+        -528,
+        -192
       ],
-      "id": "bc53c6f9-0046-4865-bb78-ec4b2de9fd2d",
+      "id": "25226990-49dc-46c7-879c-897f72a50c06",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "LZBOqJRFma0GrPrn",
+          "id": "SFucHCzpP9weZYdT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -43,23 +43,21 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1296,
-        576
+        1232,
+        112
       ],
-      "id": "0e1be107-528e-4dfd-abae-42bf4caec33f",
+      "id": "2e90c088-739b-46fd-a37e-bed4270ad7f8",
       "name": "queryVectorDB"
     },
     {
       "parameters": {
         "toolDescription": "Makes an HTTP request and returns the Variety-wise Daily Market Prices Data of Commodity\n",
         "url": "https://api.data.gov.in/resource/35985678-0d79-46b4-9ed6-6f13308a1d24",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            {
-              "name": "api-key",
-              "value": "579b464db66ec23bdd0000010ce6346233bf42b173168aaf9d0f9f66"
-            },
             {
               "name": "format",
               "value": "json"
@@ -88,16 +86,24 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        800,
-        512
+        736,
+        48
       ],
-      "id": "e0641835-1238-49df-8899-068f170d7f42",
-      "name": "GetCommodityPrice"
+      "id": "0a37f934-23ff-4508-9fd1-5530f1bd7660",
+      "name": "GetCommodityPrice",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "eH04X77wD71wU907",
+          "name": "Query Auth account"
+        }
+      }
     },
     {
       "parameters": {
         "toolDescription": "Makes an HTTP request and returns the Current Daily Price of Various Commodities from Various Markets (Mandi)",
         "url": "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -120,10 +126,6 @@
             {
               "name": "filters[commodity]",
               "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', ``, 'string') }}"
-            },
-            {
-              "name": "api-key",
-              "value": "579b464db66ec23bdd0000010ce6346233bf42b173168aaf9d0f9f66"
             }
           ]
         },
@@ -134,11 +136,17 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        576,
-        512
+        512,
+        48
       ],
-      "id": "417f7122-5383-4256-bfab-92b5dc6f96bd",
-      "name": "GetMandiPrice"
+      "id": "ceabb7da-4714-4ae2-ac27-8bec03674c34",
+      "name": "GetMandiPrice",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "eH04X77wD71wU907",
+          "name": "Query Auth account"
+        }
+      }
     },
     {
       "parameters": {
@@ -154,10 +162,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        0
+        -64,
+        -464
       ],
-      "id": "2da4c3f9-1c86-4580-84b9-663976a451db",
+      "id": "3772c444-d7f2-4467-8242-02ebd5feaae9",
       "name": "Webhook",
       "webhookId": "1a28743f-1c7b-43e6-acb4-79bfd16aaafc",
       "notesInFlow": false
@@ -169,14 +177,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        16,
-        560
+        -48,
+        96
       ],
-      "id": "74a55c50-5c8d-4856-be4e-ee0a13d1ef48",
+      "id": "0a57391f-4091-418b-9b77-71c0d8abeaba",
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "LZBOqJRFma0GrPrn",
+          "id": "SFucHCzpP9weZYdT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -186,10 +194,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolThink",
       "typeVersion": 1.1,
       "position": [
-        -304,
-        272
+        -368,
+        -192
       ],
-      "id": "88d764d3-25ef-4ece-a6b6-0a9f18c717b6",
+      "id": "aa3f7391-0b07-4dda-8a2b-1d44ab8ab24c",
       "name": "Think"
     },
     {
@@ -202,10 +210,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        48,
-        336
+        -16,
+        -128
       ],
-      "id": "84f9fe36-4201-4141-87b8-efa331b689e0",
+      "id": "5fb8141f-8a11-4ad5-ab61-09aa1c929dc9",
       "name": "Weather & Geo Location Agent"
     },
     {
@@ -219,10 +227,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        800,
-        0
+        736,
+        -464
       ],
-      "id": "d00c7ab4-7732-40a2-b171-ce8540d9bb0b",
+      "id": "249b59c1-fc1a-452d-b24b-f1609b878307",
       "name": "Orchestrator Agent",
       "alwaysOutputData": false,
       "executeOnce": false,
@@ -238,10 +246,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        1584,
-        288
+        1520,
+        -176
       ],
-      "id": "0a22b9a0-86f3-4c45-afca-d4b2dfc21b6d",
+      "id": "da7f7b4b-bffd-4cc6-b052-10d4d4773999",
       "name": "Policy & Finance Assistant"
     },
     {
@@ -254,10 +262,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        528,
-        288
+        464,
+        -176
       ],
-      "id": "829669bb-d675-4c2e-8663-9ac68d71b4ff",
+      "id": "bd5a9928-31ce-45e2-b0b3-38c683f5f9b0",
       "name": "Market Price Retriever"
     },
     {
@@ -265,10 +273,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolCalculator",
       "typeVersion": 1,
       "position": [
-        688,
-        480
+        624,
+        16
       ],
-      "id": "a272623f-3c6f-4c2b-a90f-53c6357f47b3",
+      "id": "a2ed404a-4a9b-453c-a7cf-83246e90a386",
       "name": "Calculator"
     },
     {
@@ -278,14 +286,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        480,
-        672
+        416,
+        208
       ],
-      "id": "00fbf38b-2ef1-49b6-afdd-10419529571a",
+      "id": "7c85ab30-7cce-4388-a8ca-02deaf899e7b",
       "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
-          "id": "LZBOqJRFma0GrPrn",
+          "id": "SFucHCzpP9weZYdT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -297,14 +305,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1040,
-        576
+        976,
+        112
       ],
-      "id": "2ba38bb3-3271-4663-807c-d0bfd5a85e39",
+      "id": "59df2e68-fb05-4bd2-a9b3-9780b9766ead",
       "name": "Google Gemini Chat Model3",
       "credentials": {
         "googlePalmApi": {
-          "id": "LZBOqJRFma0GrPrn",
+          "id": "SFucHCzpP9weZYdT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -317,14 +325,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1584,
-        496
+        1520,
+        32
       ],
-      "id": "72512bcb-f748-4b3b-bc95-418bda4b16de",
+      "id": "175e3d99-46be-4f28-9dde-0f43ba53b090",
       "name": "Google Gemini Chat Model4",
       "credentials": {
         "googlePalmApi": {
-          "id": "LZBOqJRFma0GrPrn",
+          "id": "SFucHCzpP9weZYdT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -338,11 +346,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        432,
-        272
+        368,
+        -192
       ],
       "typeVersion": 1,
-      "id": "61946d88-f090-4378-b948-b4c9d5cee418",
+      "id": "efa05c4e-656b-41b4-a107-6f9061c0e4fc",
       "name": "Sticky Note1"
     },
     {
@@ -354,11 +362,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        944,
-        272
+        880,
+        -192
       ],
       "typeVersion": 1,
-      "id": "419fcbf9-fc62-4dc6-8a03-33b04b094424",
+      "id": "a90507a0-e62c-4888-9ee7-fdb8d2771919",
       "name": "Sticky Note2"
     },
     {
@@ -370,11 +378,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1456,
-        272
+        1392,
+        -192
       ],
       "typeVersion": 1,
-      "id": "7561a0c1-9802-4201-a370-55f1d9f02c48",
+      "id": "4f847386-400f-4b66-ba52-516f02627e4b",
       "name": "Sticky Note3"
     },
     {
@@ -386,11 +394,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -80,
-        272
+        -144,
+        -192
       ],
       "typeVersion": 1,
-      "id": "06d2822e-76a4-4b03-a215-a3e8b15efa2d",
+      "id": "6d26a568-1e62-4739-8cae-025e6ddf1594",
       "name": "Sticky Note4"
     },
     {
@@ -403,10 +411,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        1088,
-        336
+        1024,
+        -128
       ],
-      "id": "2581989a-ec9e-4544-a036-bc9e6d2fe60c",
+      "id": "0a67fa9e-b434-4a18-b7af-206168dcc647",
       "name": "Crop & Agri Assistant"
     },
     {
@@ -432,10 +440,10 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1776,
-        496
+        1712,
+        32
       ],
-      "id": "ce0ea9aa-2513-4090-8575-8eecb2f31d94",
+      "id": "95582298-e0fc-48eb-bf7e-709cf4e20f0a",
       "name": "queryFinanceVectorDB"
     },
     {
@@ -446,15 +454,15 @@
       "type": "n8n-nodes-base.openWeatherMapTool",
       "typeVersion": 1,
       "position": [
-        240,
-        560
+        176,
+        96
       ],
-      "id": "9cc329e6-964e-4500-b40e-aa0098c23935",
+      "id": "a76a3676-0627-4ca8-b676-70bfe3d0dc18",
       "name": "OpenWeatherMap1",
       "alwaysOutputData": false,
       "credentials": {
         "openWeatherMapApi": {
-          "id": "IpYonyvMgtF6nfwR",
+          "id": "ClwNU3GOz0i0BbAa",
           "name": "OpenWeatherMap account"
         }
       }
@@ -655,11 +663,11 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "65c84a50-e07d-4dc0-8c5d-02cfff311dfd",
+  "versionId": "a9669e0d-85eb-401b-b315-cd5c42fdd367",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "82532f1e19332baa70113fa5de16f116cd559c2fe9f22f4dceec04dcbf6596f2"
+    "instanceId": "9c05f17a606be671fdb86c1260916797cfd6705c991a7fca68ea6474d55c45cc"
   },
-  "id": "PXM097wfY6VzLBCQ",
+  "id": "XcyUsEls6Hkkk9hb",
   "tags": []
 }
