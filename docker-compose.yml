@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   n8n:
     image: n8nio/n8n:latest
-    container_name: agreverse_n8n
+    container_name: agriverse_n8n
     ports:
       - "5678:5678"
     environment:
@@ -20,7 +18,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: agreverse_backend
+    container_name: agriverse_backend
     ports:
       - "8000:8000"
     volumes:
@@ -32,10 +30,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: agreverse_frontend
+    container_name: agriverse_frontend
     ports:
       - "3000:3000"
-    
+    depends_on:
+      - backend
+      - n8n
     environment:
       - NODE_ENV=development
       - WEBHOOK=http://n8n:5678/webhook-test/my-endpoint

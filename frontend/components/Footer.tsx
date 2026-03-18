@@ -31,7 +31,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com/Ilesh-Dhall/AgriVerse-Capital-One-Launchpad-2025-Hackathon"
+                href="https://github.com/Ilesh-Dhall/agriverse-core"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/30 transition-all duration-200"
@@ -119,7 +119,7 @@ const Footer = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-600 dark:text-gray-400">
               © {new Date().getFullYear()} AgriVerse. All rights reserved. Built
-              for Capital One Launchpad 2025 Hackathon.
+              
             </div>
             <div className="flex items-center gap-6 text-sm">
               <a

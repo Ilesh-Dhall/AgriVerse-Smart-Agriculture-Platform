@@ -9,7 +9,7 @@
 [![Bun](https://img.shields.io/badge/bun-v1+-black.svg)](https://bun.sh/)
 ## 🎯 About AgriVerse
 
-AgriVerse is a comprehensive AI-powered agricultural advisory platform that revolutionizes farming intelligence through a sophisticated **multi-agent system**. Built for the **Capital One Launchpad 2025 Hackathon**, this platform democratizes agricultural expertise by making advanced AI accessible to farmers, agricultural specialists, researchers, and policymakers worldwide.
+AgriVerse is a comprehensive AI-powered agricultural advisory platform that revolutionizes farming intelligence through a sophisticated **multi-agent system**. This platform democratizes agricultural expertise by making advanced AI accessible to farmers, agricultural specialists, researchers, and policymakers worldwide.
 
 ### 🚀 What Makes AgriVerse Different?
 
@@ -128,8 +128,8 @@ You'll need to obtain the following API keys:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Ilesh-Dhall/AgriVerse-Capital-One-Launchpad-2025-Hackathon.git
-cd AgriVerse-Capital-One-Launchpad-2025-Hackathon
+git clone https://github.com/Ilesh-Dhall/agriverse-core.git
+cd agriverse-core
 ```
 
 ### 2. Download the Vector Databases
@@ -243,95 +243,3 @@ and many more...
 
 ---
 
-## 🏆 Hackathon Submission Details
-
-**Event**: Capital One Launchpad 2025 Hackathon
-**Event URL:** capitalone.hackerearth.com  
-**Theme**: Exploring and Building Agentic AI Solutions for a High-Impact Area of Society: Agriculture  
-
-AgriVerse represents the future of agricultural technology, where advanced AI becomes accessible to every farmer, regardless of their technical background or language.
-
-
-### 👥 Team
-
-#### **Team Name:** NameError
-
-| S. No. | Name  |
-|------|----------------|
-| **1** | [Ilesh Dhall](https://github.com/Ilesh-Dhall) |
-| **2** | [Prakhar Singh](https://github.com/PrakharSinghOnGit) |
-
----
-
-## 🔧 Manual Vector Database Setup (Optional)
-
-If you prefer to build the vector databases from scratch instead of downloading pre-built ones, you can use the provided scripts. This process may take longer but gives you full control over the database creation.
-
-### Prerequisites for Manual Setup
-- Ensure you have all backend dependencies installed (`pip install -r requirements.txt`)
-- Have sufficient disk space (the process may require several GB for processing documents)
-- Stable internet connection for downloading source data
-
-### Building the Databases
-
-#### 1. ICAR Agricultural Knowledge Database
-```bash
-cd backend/VectorDatabases
-python3 icar_vectordb_generate.py
-```
-
-This script will:
-- Download and process ICAR agricultural research documents
-- Generate embeddings using HuggingFace Sentence Transformer
-- Create the ChromaDB vector database for crop and agricultural knowledge
-- Store the database in the appropriate directory structure
-
-#### 2. Data.gov.in Policy & Finance Database
-```bash
-cd backend/VectorDatabases
-python3 datagovin_vectordb_generate.py
-```
-
-This script will:
-- Fetch government policy and financial scheme data from data.gov.in APIs
-- Process and clean the policy documents
-- Generate embeddings for financial and policy content
-- Create the ChromaDB vector database for government schemes and subsidies
-
-### ⏱️ Expected Build Times
-- **ICAR Database**: 15-30 minutes
-- **Data.gov.in Database**: 5 minutes
-
-### 🔍 Verification
-After building, verify your databases are working:
-```bash
-cd backend
-python3 -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
-```
-
-Visit `http://127.0.0.1:8000/docs` to test both the `/api/icar/query` and `/api/datagovin/query` API endpoints.
-
-**Note**: If you encounter any issues during manual setup, you can always fall back to the pre-built databases using the `vectordb_setup.sh` script.
-
----
-
-## 🙏 Acknowledgments
-
-- **Capital One Launchpad** for organizing this impactful hackathon
-- **Google** for providing access to Gemini 2.0 Flash
-- **ICAR** for agricultural research and documentation
-- **OpenWeather** for reliable weather data services
-- **Data.gov.in** for government agricultural datasets
-
----
-
-<div align="center">
-
-**Built with ❤️ for farmers, agricultural specialists, and farming communities worldwide.**
-
-*Empowering agriculture through intelligent AI agents.*
-
-[![Star this repo](https://img.shields.io/github/stars/Ilesh-Dhall/AgriVerse-Capital-One-Launchpad-2025-Hackathon?style=social)](https://github.com/Ilesh-Dhall/AgriVerse-Capital-One-Launchpad-2025-Hackathon.git)
-[![Follow us](https://img.shields.io/github/followers/Ilesh-Dhall?style=social)](https://github.com/Ilesh-Dhall)
-
-</div>
