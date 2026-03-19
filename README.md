@@ -37,8 +37,8 @@ graph TD
     H[Data.gov.in APIs] --> C
     I[GetMandiPrice Calculator] --> D
     J[GetCommodityPrice] --> D
-    K[QueryVectorDB (Port 8000)] --> E
-    L[QueryFinanceVectorDB (Port 8000)] --> F
+    K[QueryVectorDB] --> E
+    L[QueryFinanceVectorDB] --> F
     
     M[Gemini 2.0 Flash] --> B
     M --> C
@@ -98,6 +98,81 @@ graph TD
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
+- [Docker](https://docs.docker.com/get-docker/) installed and running.
+- [Docker Compose](https://docs.docker.com/compose/install/) installed.
+- (Optional, for local non-Docker runs) [Node.js](https://nodejs.org/en/download/) (v18+) and [Python](https://www.python.org/downloads/) (3.12+).
+
+### Running with Docker (Recommended)
+
+To run the entire platform simply using Docker Compose:
+
+1. **First-time setup and build**:
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **For subsequent uses (no build required)**:
+   ```bash
+   docker-compose up
+   ```
+
+### 📍 Endpoints and Access
+
+Once the containers are up and running, you can access the services at the following endpoints:
+
+- **Frontend App**: [http://localhost:3000](http://localhost:3000)
+- **Backend API Server**: [http://localhost:8000](http://localhost:8000) (Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs))
+- **n8n Workflow Automation**: [http://localhost:5678](http://localhost:5678)
+
+### ⚙️ n8n Configuration & API Keys
+
+To make the multi-agent system fully functional, you need to set up the following APIs in n8n (accessible at [http://localhost:5678](http://localhost:5678)):
+
+1. **Gemini API**:
+   - Go to [Google AI Studio](https://aistudio.google.com/) and get a **free API key**.
+   - In n8n, configure your Gemini node with this API key.
+2. **Weather API**:
+   - Create a free account at [OpenWeatherMap](https://openweathermap.org/) and generate an API key.
+   - Configure the HTTP node in n8n for weather data with this key.
+3. **Mandi and Commodity Prices (data.gov.in)**:
+   - Create an account on [data.gov.in](https://data.gov.in/) to get your free API key.
+   - Use this API key for retrieving live Mandi and Commodity prices.
+4. **Setting up HTTP Node Credentials**:
+   - In the n8n UI, go to **Credentials** -> **Add Credential** -> Search for **Header Auth** (or the corresponding auth type).
+   - Set up your API keys for the HTTP nodes used in the workflow.
+
+### 💻 Local Development (Without Docker)
+
+If you prefer to run each directory locally without Docker, follow these steps:
+
+#### 1. Backend
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+The backend will be available at [http://localhost:8000](http://localhost:8000).
+
+#### 2. Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The frontend will be available at [http://localhost:3000](http://localhost:3000).
+
+#### 3. n8n (using npx)
+
+```bash
+npx n8n
+```
+n8n will be available at [http://localhost:5678](http://localhost:5678).
+
+---
 
 - **Docker and Docker Compose** ([Download Docker](https://www.docker.com/products/docker-desktop/))
 - **Git** ([Download Git](https://git-scm.com/downloads))
