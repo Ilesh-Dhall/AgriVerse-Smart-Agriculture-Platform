@@ -11,4 +11,35 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true,
+    port: 3000,
+    watch: {
+      usePolling: true,
+    },
+    proxy: {
+      '/webhook-test': {
+        target: 'http://n8n:5678',
+        changeOrigin: true,
+      },
+      '/webhook': {
+        target: 'http://n8n:5678',
+        changeOrigin: true,
+      }
+    }
+  },
+  preview: {
+    host: true,
+    port: 3000,
+    proxy: {
+      '/webhook-test': {
+        target: 'http://n8n:5678',
+        changeOrigin: true,
+      },
+      '/webhook': {
+        target: 'http://n8n:5678',
+        changeOrigin: true,
+      }
+    }
+  },
 })

@@ -227,25 +227,26 @@ export function AgriChatApp() {
         .map((msg) => ({ role: msg.type === "user" ? "user" : "assistant", content: msg.text }))
         .concat({ role: "user", content: userMessage });
 
-      const response = await fetch("/chat", {
+      const response = await fetch("/webhook/my-endpoint?query_format=text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "text",
           message: JSON.stringify(
-            "this is my profile data: " + JSON.stringify(profileData) +
-            "and this is my conversation history: " + JSON.stringify(contextualMessage),
+            // "this is my profile data: " + JSON.stringify(profileData) +
+            // JSON.stringify(contextualMessage),
+            userMessage
           ),
         }),
       });
 
       if (!response.ok) console.log(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      if (!data.response) return "I'm sorry, there was an error processing your request. Please try again.";
-      if (Array.isArray(data.response) && data.response[0]?.output) return data.response[0].output;
-      if (typeof data.response === "string") return data.response;
-      if (data.response.content || data.response.message) return data.response.content || data.response.message;
-      return data.response;
+
+      if (!data) return "I'm sorry, there was an error processing your request. Please try again.";
+      if (Array.isArray(data) && data[0]?.output) return data[0].output;
+      if (typeof data === "string") return data;
+      if (data.content || data.message) return data.content || data.message;
+      return typeof data === "object" ? JSON.stringify(data) : String(data);
     } catch (error) {
       console.error("Error getting AI response:", error);
       return "I'm sorry, I am having trouble connecting right now. Please try again in a moment.";
@@ -500,16 +501,16 @@ export function AgriChatApp() {
                   </div>
 
                   {/* Bubble */}
-                  <div className={`flex flex-col max-w-[82%] ${message.type === "user" ? "items-end" : "items-start"}`}>
+                  <div className={`flex flex-col min-w-0 max-w-[82%] ${message.type === "user" ? "items-end" : "items-start"}`}>
                     <div
                       className={
                         message.type === "user"
-                          ? "rounded-2xl rounded-tr-md bg-primary px-4 py-3 text-primary-foreground text-sm leading-relaxed"
-                          : "rounded-2xl rounded-tl-md bg-card border border-border px-4 py-3 text-foreground text-sm leading-relaxed"
+                          ? "rounded-2xl rounded-tr-md bg-primary px-4 py-3 text-primary-foreground text-sm leading-relaxed overflow-hidden break-words"
+                          : "rounded-2xl rounded-tl-md bg-card border border-border px-4 py-3 text-foreground text-sm leading-relaxed overflow-x-auto break-words"
                       }
                     >
                       {message.type === "ai" ? (
-                        <div className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-code:text-primary prose-a:text-primary">
+                        <div className="prose prose-sm w-full min-w-0 max-w-none dark:prose-invert prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-code:text-primary prose-a:text-primary">
                           <ReactMarkdown>{message.text}</ReactMarkdown>
                         </div>
                       ) : (
@@ -522,8 +523,8 @@ export function AgriChatApp() {
                             <span
                               key={item.id}
                               className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] border ${message.type === "user"
-                                  ? "bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground/70"
-                                  : "bg-muted border-border text-muted-foreground"
+                                ? "bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground/70"
+                                : "bg-muted border-border text-muted-foreground"
                                 }`}
                             >
                               {item.label}
@@ -556,10 +557,10 @@ export function AgriChatApp() {
                   <div className="shrink-0 mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
                     <Leaf className="h-3.5 w-3.5 text-primary" />
                   </div>
-                  <div className="flex flex-col items-start max-w-[82%]">
-                    <div className="rounded-2xl rounded-tl-md bg-card border border-border px-4 py-3">
+                  <div className="flex flex-col items-start min-w-0 max-w-[82%]">
+                    <div className="rounded-2xl rounded-tl-md bg-card border border-border px-4 py-3 overflow-x-auto break-words">
                       {typingMessage ? (
-                        <div className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-code:text-primary">
+                        <div className="prose prose-sm w-full min-w-0 max-w-none dark:prose-invert prose-p:text-foreground prose-headings:text-foreground prose-strong:text-foreground prose-code:text-primary">
                           <ReactMarkdown>{typingMessage.text + " ▌"}</ReactMarkdown>
                         </div>
                       ) : (

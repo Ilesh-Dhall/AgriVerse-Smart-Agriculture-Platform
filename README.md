@@ -5,13 +5,13 @@
 [![Python](https://img.shields.io/badge/python-v3.12+-blue.svg)](https://www.python.org/downloads/)
 [![React](https://img.shields.io/badge/react-v18+-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-v5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![FastAPI](https://img.shields.io/badge/fastapi-v0.100+-green.svg)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/fastapi-v0.100+-gr`een.svg)](https://fastapi.tiangolo.com/)
 [![Bun](https://img.shields.io/badge/bun-v1+-black.svg)](https://bun.sh/)
-## 🎯 About AgriVerse
+## About AgriVerse
 
 AgriVerse is a comprehensive AI-powered agricultural advisory platform that revolutionizes farming intelligence through a sophisticated **multi-agent system**. This platform democratizes agricultural expertise by making advanced AI accessible to farmers, agricultural specialists, researchers, and policymakers worldwide.
 
-### 🚀 What Makes AgriVerse Different?
+###    What Makes AgriVerse Different?
 
 **This is not just another LLM wrapper.** AgriVerse is a fully agentic system featuring:
 
@@ -47,9 +47,9 @@ graph TD
     M --> F
 ```
 
-## ✨ Key Features
+## Key Features
 
-### 🤖 Multi-Agent Intelligence
+### Multi-Agent Intelligence
 - **Orchestrator Agent**: Intelligent query routing and coordination
 - **Weather & Geo Location Agent**: Real-time weather analysis and geographical insights
 - **Market Price Retriever Agent**: Live commodity and mandi price intelligence

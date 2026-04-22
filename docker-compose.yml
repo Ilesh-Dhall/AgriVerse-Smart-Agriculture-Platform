@@ -36,9 +36,12 @@ services:
     depends_on:
       - backend
       - n8n
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     environment:
       - NODE_ENV=development
-      - WEBHOOK=http://n8n:5678/webhook-test/my-endpoint
+      - WEBHOOK=http://n8n:5678/webhook/my-endpoint
 
 volumes:
   n8n_data:
