@@ -57,6 +57,7 @@ node_modules/
 venv
 
 icar_db/
+test/
 
 # Data
 processed/

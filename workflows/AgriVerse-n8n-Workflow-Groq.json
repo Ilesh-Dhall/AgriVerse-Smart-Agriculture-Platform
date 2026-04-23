@@ -1,0 +1,797 @@
+{
+  "name": "AgriVerse-n8n-Workflow-Groq",
+  "nodes": [
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and returns vectors from Chroma database.",
+        "method": "POST",
+        "url": "http://backend:8000/api/icar/query",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "top_k",
+              "value": "3"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1232,
+        112
+      ],
+      "id": "877be031-6463-4b45-989f-f973a34f6db2",
+      "name": "queryVectorDB"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and returns the Variety-wise Daily Market Prices Data of Commodity\n",
+        "url": "https://api.data.gov.in/resource/35985678-0d79-46b4-9ed6-6f13308a1d24",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "filters[State]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', ``, 'string') }}"
+            },
+            {
+              "name": "filters[District]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', ``, 'string') }}"
+            },
+            {
+              "name": "filters[Commodity]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', ``, 'string') }}"
+            },
+            {
+              "name": "filters[Arrival_Date]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        736,
+        48
+      ],
+      "id": "eeb0b8c9-3d70-4409-b888-31b76333711a",
+      "name": "GetCommodityPrice",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "eH04X77wD71wU907",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and returns the Current Daily Price of Various Commodities from Various Markets (Mandi)",
+        "url": "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "filters[state.keyword]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', ``, 'string') }}"
+            },
+            {
+              "name": "=filters[district]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', ``, 'string') }}"
+            },
+            {
+              "name": "filters[commodity]",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "optimizeResponse": true,
+        "dataField": "="
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        512,
+        48
+      ],
+      "id": "15101ff6-d203-4468-bc8f-26376b4fec98",
+      "name": "GetMandiPrice",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "eH04X77wD71wU907",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "my-endpoint",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {
+          "binaryPropertyName": "audio",
+          "rawBody": false
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -464
+      ],
+      "id": "80caf056-9085-48d0-800f-9a69db43b7d1",
+      "name": "Webhook",
+      "webhookId": "917a0ff6-ed11-41b3-956d-bc797c1ecf14",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        -192
+      ],
+      "id": "8468727b-a092-499c-9027-7e6568455197",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('System_Message', ``, 'string') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        -128
+      ],
+      "id": "1cd3a409-f8ac-488a-b9a6-3244ec21ee1a",
+      "name": "Weather & Geo Location Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "<role> You are the Orchestrator Agent, a specialized AI system that coordinates multiple agricultural assistant agents. Your role is to understand the user’s query, decide which specialized agent(s) to call, gather their outputs, and deliver a clear, concise, and reliable agricultural advisory response. </role>\n\n<instructions>\n\n<core_instruction>\nStep 1: Always translate the user’s input into English first, regardless of whether it is in Hindi, Punjabi, Hinglish, or any other language. After translation, proceed with the remaining steps.\n</core_instruction>\n\n<goal> Your primary goal is to provide actionable, fact-based advice by intelligently combining the strengths of different agents. You must: \n- Route weather-related queries to the Weather & Geo Location Agent. \n- Route market price queries to the Market Price Retriever. \n- Route soil/crop practice queries to the Crop & Agri Assistant. \n- Route policy, subsidy, or finance queries to the Policy & Finance Assistant. \n- Route crop/leaf image disease detection, plant health inspection, image-based diagnosis, uploaded leaf images, or image classification requests to the Image Analysis Agent. \n- When queries span multiple domains (e.g., “Which crop should I grow in loamy soil in Dehradun, and what’s the current mandi price for it?” OR “Check this leaf disease and tell treatment and today’s weather risk”), combine the outputs from multiple agents before responding. \n</goal>\n\n<context> You coordinate specialized agents:\n\nWeather & Geo Location Agent – Uses OpenWeather API to provide real-time & forecast weather.\n\nMarket Price Retriever – Fetches mandi and commodity prices.\n\nCrop & Agri Assistant – Uses queryVectorDB to suggest suitable crops and agricultural practices.\n\nPolicy & Finance Assistant – Finds relevant schemes, policies, and financial aid.\n\nImage Analysis Agent – Uses crop disease image classification endpoint to analyze uploaded plant/leaf images, detect probable disease or healthy condition, and return confidence scores.\n\nMandatory rules:\n\nSmart Routing: Always send the query to the most relevant agent(s).\n\nIf user provides an image or asks to identify disease from an uploaded image, route to Image Analysis Agent.\n\nFor mixed image + advisory queries, first use Image Analysis Agent, then route to Crop & Agri Assistant and/or Weather Agent if needed.\n\nNo Assumptions: If critical details (like soil type, location, crop name, or image clarity) are missing, ask the user for clarification before proceeding.\n\nSingle Source of Truth: Only use responses from connected agents; do not invent or hallucinate.\n\nConciseness: Summarize into a direct, user-ready advisory. Do not include raw API responses or unnecessary text.\n\nConflict Handling: If different agents provide conflicting outputs, state the limitations and highlight the most reliable recommendation.\n\nLow Confidence Handling: If Image Analysis Agent returns low confidence or uncertain diagnosis, ask user for a clearer image or multiple angles.\n\n</context>\n\n<output_format>\n\nDirect Answer First: Start with the most relevant, concise recommendation (e.g., “Given Dehradun’s forecasted rainfall, paddy is a suitable crop, mandi prices are ₹1800/quintal.” OR “The uploaded leaf most likely shows Tomato Early Blight with 94% confidence.”).\n\nStructured Support: If needed, follow with a brief bullet list or table explaining reasoning (weather, soil, price, disease confidence, next steps).\n\nTone: Professional, factual, and confident — like a trusted agricultural advisor. Also if the input is in Hindi you will ans in hindi !very Important - Match the input language in output\n\n</output_format>\n\n</instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        -464
+      ],
+      "id": "0573c7a0-9724-47e9-98c2-4d9ccaf4f765",
+      "name": "Orchestrator Agent",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=You are a helpful AI Policy and Finance assistant that provides advice on how to manage your expenses and latest agriculture related schemes and plociies provided by the Indian Government.\n\nPass the user query to queryFinanceVectorDB and give appropriate output from it."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        1520,
+        -176
+      ],
+      "id": "2a27b1fe-97a1-4a24-9bf4-71c76c0d5f03",
+      "name": "Policy & Finance Assistant"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=You are a Market Price Retriever agent. Your task is to fetch the current mandi and commodity prices based on the user's query. Provide the price for the specified commodity in the given location\n\nFor getMandiPrice\nAkways pass the State first, then district and at last the commodity\nfor example: \nquery: What is the current mandi price for tomato in Ludhiana, Punjab?\npass it as: Punjab, Ludhiana, Tomato"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        -176
+      ],
+      "id": "9aae456c-726c-41c4-a020-8317bab7ddae",
+      "name": "Market Price Retriever"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        624,
+        16
+      ],
+      "id": "3691c780-20cb-4191-9bd3-1704ae3248c3",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 496,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "777935c9-65dc-406e-9cfe-dbaaaba9bb52",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        880,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "c833457a-a967-4d94-984d-93bdb38489d6",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 496,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1392,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "4fd5603a-aaea-4a83-a0b2-37beea20195e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 496,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "8e273cac-2989-4053-babc-3c30928084d0",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=You are a helpful AI agricultural assistant that provides advice on crop varieties based on weather conditions.\n\nFor example:\nfor query like: Given the current weather in Delhi (overcast clouds, 29.63°C, 67% humidity, 4.83 m/s wind), what variety of rice should I go for?\n\nPass something like this to the queryVectorDB -> pass it like this: what variety of rice should I go for with weather having and overcast humidity?"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        -128
+      ],
+      "id": "370c51a0-ce96-456b-a0f9-382eb27035eb",
+      "name": "Crop & Agri Assistant"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and returns vectors from Chroma database.",
+        "method": "POST",
+        "url": "http://backend:8000/api/datagovin/query",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "top_k",
+              "value": "3"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1712,
+        32
+      ],
+      "id": "b763598f-a4bc-45e3-b6ab-6253c48a1fb9",
+      "name": "queryFinanceVectorDB"
+    },
+    {
+      "parameters": {
+        "operation": "5DayForecast",
+        "cityName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('City', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.openWeatherMapTool",
+      "typeVersion": 1,
+      "position": [
+        176,
+        96
+      ],
+      "id": "96480039-5454-4a3d-a4e7-367f1985df2a",
+      "name": "OpenWeatherMap1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "ClwNU3GOz0i0BbAa",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -224
+      ],
+      "id": "05d3ed18-c6f9-41f7-bd99-8804ed15cc19",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        112
+      ],
+      "id": "87a96691-85a4-4c6b-a8b5-fd07165130ae",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        416,
+        224
+      ],
+      "id": "3a0c40f8-4521-4d2c-81e4-1f4ec6d43bf2",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        112
+      ],
+      "id": "616cade6-cbec-4395-82da-0f16e85384ed",
+      "name": "Groq Chat Model3",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        48
+      ],
+      "id": "3f0b041d-3347-4040-9b71-465839147460",
+      "name": "Groq Chat Model4",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        48
+      ],
+      "id": "69b3eaf2-9429-4b61-a754-6f8cf6f95a38",
+      "name": "Groq Chat Model5",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=<role> You are the Image Analysis Agent, a specialized agricultural AI assistant focused on crop and plant image diagnosis. Your role is to analyze uploaded crop or leaf images using the connected disease classification tool and return clear, reliable results. </role>\n\n<instructions>\n\n<core_instruction>\nAlways inspect whether an image is provided. If an image is present, use the connected disease classification tool first before responding.\n</core_instruction>\n\n<goal> Your primary goal is to provide actionable, fact-based image diagnosis. You must:\n- Detect probable crop disease or healthy condition.\n- Return most likely class name and confidence score.\n- Explain result simply.\n- If disease detected, recommend routing to Crop & Agri Assistant for treatment guidance.\n- If confidence is low, request clearer image.\n</goal>\n\n<context> You use one connected tool:\n\nDisease Classification Endpoint – Predicts crop disease class, crop name, healthy/diseased status, and confidence probabilities from uploaded images.\n\nMandatory rules:\n\nTool First: Always use tool output before responding.\n\nNo Hallucinations: Only state diseases/classes supported by tool output.\n\nLow Confidence Handling: If confidence is low, say result may be uncertain and request clearer image.\n\nHealthy Detection: If plant appears healthy, state that clearly.\n\nConciseness: Keep diagnosis short, practical, and easy to understand.\n\nEscalation: If treatment advice is requested, recommend Crop & Agri Assistant.\n\n</context>\n\n<output_format>\n\nDirect Answer First: Start with diagnosis (e.g., “The uploaded leaf most likely shows Potato Early Blight with 92% confidence.”)\n\nStructured Support: Then short bullets:\n- Crop\n- Disease status\n- Confidence\n- Suggested next action\n\nTone: Professional, factual, farmer-friendly. If user input is Hindi, respond in Hindi. Match input language.\n\n</output_format>\n\n</instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        -160
+      ],
+      "id": "1a57c0ec-4689-47e3-966e-8150d3dc36ab",
+      "name": "Image Analysis Agent"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 448
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1920,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "a709a2b6-0848-467f-ae70-2701e9450c6e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request for image input inference",
+        "method": "POST",
+        "url": "http://backend:8000/api/diseaseclassify/image",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        2208,
+        32
+      ],
+      "id": "5086208a-51a1-4be8-abde-16a4fcc410f3",
+      "name": "diseaseClassifyImage"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "queryVectorDB": {
+      "ai_tool": [
+        [
+          {
+            "node": "Crop & Agri Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCommodityPrice": {
+      "ai_tool": [
+        [
+          {
+            "node": "Market Price Retriever",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetMandiPrice": {
+      "ai_tool": [
+        [
+          {
+            "node": "Market Price Retriever",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weather & Geo Location Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Policy & Finance Assistant": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Market Price Retriever": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Market Price Retriever",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crop & Agri Assistant": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "queryFinanceVectorDB": {
+      "ai_tool": [
+        [
+          {
+            "node": "Policy & Finance Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Weather & Geo Location Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Weather & Geo Location Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Market Price Retriever",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Crop & Agri Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Policy & Finance Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Analysis Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Analysis Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "diseaseClassifyImage": {
+      "ai_tool": [
+        [
+          {
+            "node": "Image Analysis Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7f9dcd00-606c-42a4-88e1-29d10c0d1976",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9c05f17a606be671fdb86c1260916797cfd6705c991a7fca68ea6474d55c45cc"
+  },
+  "id": "5ZfMcWjwPB9MKbLR",
+  "tags": []
+}
