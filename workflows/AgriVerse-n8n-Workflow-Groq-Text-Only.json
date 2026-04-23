@@ -136,15 +136,15 @@
         "responseMode": "lastNode",
         "responseData": "allEntries",
         "options": {
-          "binaryPropertyName": "file",
+          "binaryPropertyName": "audio",
           "rawBody": false
         }
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -384,
-        -576
+        -64,
+        -464
       ],
       "id": "80caf056-9085-48d0-800f-9a69db43b7d1",
       "name": "Webhook",
@@ -181,9 +181,9 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=User Query:\n{{ $json.message }}\n\nImage Analysis Results:\n{{ JSON.stringify($json) }}",
+        "text": "={{ $json.body.message }}",
         "options": {
-          "systemMessage": "<role> You are the Orchestrator Agent, a specialized AI system that coordinates multiple agricultural assistant agents. Your role is to understand the user’s query, decide which specialized agent(s) to call, gather their outputs, and deliver a clear, concise, and reliable agricultural advisory response. </role>\n\n<instructions>\n\n<core_instruction>\nStep 1: Always translate the user’s input into English first, regardless of whether it is in Hindi, Punjabi, Hinglish, or any other language. After translation, proceed with the remaining steps.\n</core_instruction>\n\n<goal>\nYour primary goal is to provide actionable, fact-based advice by intelligently combining the strengths of different agents. You must:\n- Route weather-related queries to the Weather & Geo Location Agent.\n- Route market price queries to the Market Price Retriever.\n- Route soil/crop practice queries to the Crop & Agri Assistant.\n- Route policy, subsidy, or finance queries to the Policy & Finance Assistant.\n- Use provided image analysis results for crop/leaf image disease detection, plant health inspection, image-based diagnosis, uploaded leaf images, or image classification requests.\n- When queries span multiple domains (e.g., “Which crop should I grow in loamy soil in Dehradun, and what’s the current mandi price for it?” OR “Check this leaf disease and tell treatment and today’s weather risk”), combine the outputs from multiple agents before responding.\n</goal>\n\n<context>\n\nYou coordinate specialized agents:\n\nWeather & Geo Location Agent – Uses OpenWeather API to provide real-time & forecast weather.  \nMarket Price Retriever – Fetches mandi and commodity prices.  \nCrop & Agri Assistant – Uses queryVectorDB to suggest suitable crops and agricultural practices.  \nPolicy & Finance Assistant – Finds relevant schemes, policies, and financial aid.  \nImage Analysis Results – Precomputed crop disease image classification output containing probable crop name, disease/healthy status, and confidence scores.\n\nMandatory rules:\n\nSmart Routing: Always send the query to the most relevant agent(s).\n\nIf the request is about an uploaded image or plant disease image, use the provided Image Analysis Results as the source of truth first, then perform further reasoning or call other relevant agents if needed.\n\nIf image analysis results are available, use them for crop name, disease name, healthy/diseased status, and confidence.\n\nFor mixed image + advisory queries, first use the provided image results, then route diagnosis output to Crop & Agri Assistant and/or Weather Agent if needed.\n\nIf only text is given and no image results are present, work normally using the relevant agents based on the user query.\n\nStrict Accuracy:\nDo not generate market prices, weather forecasts, subsidies, locations, or any factual data unless returned by the relevant connected agent/tool.\n\nIf only image analysis results are available, respond only with:\n- diagnosis\n- confidence\n- practical prevention/treatment guidance\n- request for clearer image if needed\n\nNo Assumptions: If critical details (like soil type, location, crop name, or image clarity) are missing, ask the user for clarification before proceeding.\n\nSingle Source of Truth: Only use responses from connected agents/tools or provided image results; do not invent or hallucinate.\n\nConciseness: Keep responses short, useful, and actionable. Avoid unnecessary theory or long explanations.\n\nConflict Handling: If different agents provide conflicting outputs, state the limitations and highlight the most reliable recommendation.\n\nLow Confidence Handling: If provided image results show confidence below 80% or uncertain diagnosis, clearly mention uncertainty and ask user for a clearer image or multiple angles.\n\n</context>\n\n<output_format>\n\nDirect Answer First: Start with the most relevant, concise recommendation.\n\nIf image query example:\n“The uploaded leaf most likely shows Tomato Early Blight with 94% confidence.”\n\nIf text query example:\n“Given Dehradun’s forecasted rainfall, paddy is a suitable crop.”\n\nStructured Support:\nUse short bullet points when helpful:\n- Crop\n- Disease status\n- Confidence\n- Next steps\n- Relevant advisory\n\nTone: Professional, factual, confident, and farmer-friendly.\n\nAlso if the input is in Hindi you will ans in hindi !very Important - Match the input language in output\n\n</output_format>\n\n</instructions>"
+          "systemMessage": "<role> You are the Orchestrator Agent, a specialized AI system that coordinates multiple agricultural assistant agents. Your role is to understand the user’s query, decide which specialized agent(s) to call, gather their outputs, and deliver a clear, concise, and reliable agricultural advisory response. </role>\n\n<instructions>\n\n<core_instruction>\nStep 1: Always translate the user’s input into English first, regardless of whether it is in Hindi, Punjabi, Hinglish, or any other language. After translation, proceed with the remaining steps.\n</core_instruction>\n\n<goal> Your primary goal is to provide actionable, fact-based advice by intelligently combining the strengths of different agents. You must: \n- Route weather-related queries to the Weather & Geo Location Agent. \n- Route market price queries to the Market Price Retriever. \n- Route soil/crop practice queries to the Crop & Agri Assistant. \n- Route policy, subsidy, or finance queries to the Policy & Finance Assistant. \n- Route crop/leaf image disease detection, plant health inspection, image-based diagnosis, uploaded leaf images, or image classification requests to the Image Analysis Agent. \n- When queries span multiple domains (e.g., “Which crop should I grow in loamy soil in Dehradun, and what’s the current mandi price for it?” OR “Check this leaf disease and tell treatment and today’s weather risk”), combine the outputs from multiple agents before responding. \n</goal>\n\n<context> You coordinate specialized agents:\n\nWeather & Geo Location Agent – Uses OpenWeather API to provide real-time & forecast weather.\n\nMarket Price Retriever – Fetches mandi and commodity prices.\n\nCrop & Agri Assistant – Uses queryVectorDB to suggest suitable crops and agricultural practices.\n\nPolicy & Finance Assistant – Finds relevant schemes, policies, and financial aid.\n\nImage Analysis Agent – Uses crop disease image classification endpoint to analyze uploaded plant/leaf images, detect probable disease or healthy condition, and return confidence scores.\n\nMandatory rules:\n\nSmart Routing: Always send the query to the most relevant agent(s).\n\nIf user provides an image or asks to identify disease from an uploaded image, route to Image Analysis Agent.\n\nFor mixed image + advisory queries, first use Image Analysis Agent, then route to Crop & Agri Assistant and/or Weather Agent if needed.\n\nNo Assumptions: If critical details (like soil type, location, crop name, or image clarity) are missing, ask the user for clarification before proceeding.\n\nSingle Source of Truth: Only use responses from connected agents; do not invent or hallucinate.\n\nConciseness: Summarize into a direct, user-ready advisory. Do not include raw API responses or unnecessary text.\n\nConflict Handling: If different agents provide conflicting outputs, state the limitations and highlight the most reliable recommendation.\n\nLow Confidence Handling: If Image Analysis Agent returns low confidence or uncertain diagnosis, ask user for a clearer image or multiple angles.\n\n</context>\n\n<output_format>\n\nDirect Answer First: Start with the most relevant, concise recommendation (e.g., “Given Dehradun’s forecasted rainfall, paddy is a suitable crop, mandi prices are ₹1800/quintal.” OR “The uploaded leaf most likely shows Tomato Early Blight with 94% confidence.”).\n\nStructured Support: If needed, follow with a brief bullet list or table explaining reasoning (weather, soil, price, disease confidence, next steps).\n\nTone: Professional, factual, and confident — like a trusted agricultural advisor. Also if the input is in Hindi you will ans in hindi !very Important - Match the input language in output\n\n</output_format>\n\n</instructions>"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -473,6 +473,58 @@
     },
     {
       "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        48
+      ],
+      "id": "69b3eaf2-9429-4b61-a754-6f8cf6f95a38",
+      "name": "Groq Chat Model5",
+      "credentials": {
+        "groqApi": {
+          "id": "MtV3AREYxYQJd4NK",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=<role> You are the Image Analysis Agent, a specialized agricultural AI assistant focused on crop and plant image diagnosis. Your role is to analyze uploaded crop or leaf images using the connected disease classification tool and return clear, reliable results. </role>\n\n<instructions>\n\n<core_instruction>\nAlways inspect whether an image is provided. If an image is present, use the connected disease classification tool first before responding.\n</core_instruction>\n\n<goal> Your primary goal is to provide actionable, fact-based image diagnosis. You must:\n- Detect probable crop disease or healthy condition.\n- Return most likely class name and confidence score.\n- Explain result simply.\n- If disease detected, recommend routing to Crop & Agri Assistant for treatment guidance.\n- If confidence is low, request clearer image.\n</goal>\n\n<context> You use one connected tool:\n\nDisease Classification Endpoint – Predicts crop disease class, crop name, healthy/diseased status, and confidence probabilities from uploaded images.\n\nMandatory rules:\n\nTool First: Always use tool output before responding.\n\nNo Hallucinations: Only state diseases/classes supported by tool output.\n\nLow Confidence Handling: If confidence is low, say result may be uncertain and request clearer image.\n\nHealthy Detection: If plant appears healthy, state that clearly.\n\nConciseness: Keep diagnosis short, practical, and easy to understand.\n\nEscalation: If treatment advice is requested, recommend Crop & Agri Assistant.\n\n</context>\n\n<output_format>\n\nDirect Answer First: Start with diagnosis (e.g., “The uploaded leaf most likely shows Potato Early Blight with 92% confidence.”)\n\nStructured Support: Then short bullets:\n- Crop\n- Disease status\n- Confidence\n- Suggested next action\n\nTone: Professional, factual, farmer-friendly. If user input is Hindi, respond in Hindi. Match input language.\n\n</output_format>\n\n</instructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        -160
+      ],
+      "id": "1a57c0ec-4689-47e3-966e-8150d3dc36ab",
+      "name": "Image Analysis Agent"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 544,
+        "width": 448
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1920,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "a709a2b6-0848-467f-ae70-2701e9450c6e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request for image input inference",
         "method": "POST",
         "url": "http://backend:8000/api/diseaseclassify/image",
         "sendHeaders": true,
@@ -490,100 +542,23 @@
           "parameters": [
             {
               "parameterType": "formBinaryData",
-              "name": "file",
-              "inputDataFieldName": "file0"
+              "name": "file"
             }
           ]
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
       "position": [
-        352,
-        -880
+        2208,
+        32
       ],
-      "id": "12b6509d-73d1-4848-853c-5e7c1a1759a4",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "74c41ebb-589b-452c-8187-d61aafee6b61",
-              "name": "message",
-              "value": "={{ $json.body.message }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        352,
-        -688
-      ],
-      "id": "b2f1e192-0467-4f06-b41b-4054c8f25e63",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        688,
-        -800
-      ],
-      "id": "dc551d41-47fa-4aa7-85a2-3dde34d83272",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "07395516-7ea1-4e91-b595-db3ec0f5b9a1",
-              "leftValue": "={{ $binary.file0 !== undefined }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -64,
-        -576
-      ],
-      "id": "b60430f8-7819-42f3-88b3-c290e2f64fb1",
-      "name": "If"
+      "id": "5086208a-51a1-4be8-abde-16a4fcc410f3",
+      "name": "diseaseClassifyImage"
     }
   ],
-  "pinData": {
-    "Orchestrator Agent": [
-      {
-        "json": {
-          "output": "The uploaded leaf image shows symptoms likely indicative of Bacterial Leaf Spot with 87% confidence. \n\n- Disease detected: Bacterial Leaf Spot\n- Confidence: 87%\n- Suggested next action: For guidance on treatment, please consult the Crop & Agri Assistant.\n\nPlease ensure the image is clear for a more accurate diagnosis. If the condition persists or worsens, further evaluation may be required."
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
     "queryVectorDB": {
       "ai_tool": [
@@ -622,7 +597,7 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "Orchestrator Agent",
             "type": "main",
             "index": 0
           }
@@ -772,62 +747,34 @@
         ]
       ]
     },
-    "Orchestrator Agent": {
-      "main": [
-        []
-      ]
-    },
-    "HTTP Request": {
-      "main": [
+    "Groq Chat Model5": {
+      "ai_languageModel": [
         [
           {
-            "node": "Merge",
-            "type": "main",
+            "node": "Image Analysis Agent",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
+    "Image Analysis Agent": {
+      "ai_tool": [
         [
           {
             "node": "Orchestrator Agent",
-            "type": "main",
+            "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "If": {
-      "main": [
+    "diseaseClassifyImage": {
+      "ai_tool": [
         [
           {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Orchestrator Agent",
-            "type": "main",
+            "node": "Image Analysis Agent",
+            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -840,7 +787,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "ee02dc93-b0a5-430f-ab1d-43ddfa8921c3",
+  "versionId": "7f9dcd00-606c-42a4-88e1-29d10c0d1976",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9c05f17a606be671fdb86c1260916797cfd6705c991a7fca68ea6474d55c45cc"
